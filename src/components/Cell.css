@@ -1,0 +1,15 @@
+.Cell {
+    background-color: rgb(20, 22, 86);
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.Cell:hover {
+    background-color: aqua;
+}
+
+.CellChecked {
+    background-color: black;
+}
