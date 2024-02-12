@@ -15,6 +15,9 @@ function Cell({x, y} : {x: number, y: number}) {
         if (cellState == "unchecked") {
             setCellState("checked");
         }
+        else if (cellState == "checked") {
+            setCellState("unchecked");
+        }
     }
 
     return <div className={CellClass} onClick={handleClick}><span>Hello, x={x}, y={y}</span></div>;
