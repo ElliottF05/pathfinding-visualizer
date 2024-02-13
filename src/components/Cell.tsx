@@ -21,8 +21,6 @@ function Cell({x, y} : {x: number, y: number}) {
     });
 
     function handleClick() {
-        console.log(cellValue);
-        console.log(CellClass);
         if (cellValue == 0) {
             updateCellValue(1);
         }
