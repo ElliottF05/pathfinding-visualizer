@@ -1,18 +1,22 @@
 import "./Cell.css";
-import { useContext } from "react";
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import classNames from "classnames";
 import { gridContext } from "../App";
 
 function Cell({x, y} : {x: number, y: number}) {
 
-    const {grid, setGrid} = useContext(gridContext);
-    const [cellValue, setCellValue] = useState(0);
+    const {updateGrid, grid} = useContext(gridContext);
+    const [cellValue, setCellValue] = useState(grid[y][x]);
+
+    useEffect(() => {
+        setCellValue(grid[y][x])
+    }, [grid[y][x]]
+    );
 
     function updateCellValue(value: number) {
-        grid[y][x] = value;
         setCellValue(value);
-        setGrid(grid);
+        grid;
+        updateGrid(x, y, value);
     }
 
     const CellClass = classNames({
@@ -29,7 +33,7 @@ function Cell({x, y} : {x: number, y: number}) {
         }
     }
 
-    return <div className={CellClass} onClick={handleClick}><span>Hello, x={x}, y={y}</span></div>;
+    return <div className={CellClass} onClick={handleClick}><span></span></div>;
 }
 
 export default Cell;

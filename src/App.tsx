@@ -4,14 +4,11 @@ import { createContext } from "react";
 import CellContainer from "./components/CellContainer";
 import "./App.css";
 
-type gridContextType = {
-    grid: number[][]; // Adjust this to be the actual type of your grid data
-    setGrid: (grid: number[][]) => void;
-};
-
-export const gridContext = createContext<gridContextType>({
-    grid: [],
-    setGrid: () => {},
+export const gridContext = createContext({
+    updateGrid: (x: number, y: number, value: number) => {
+        x + y + value;
+    },
+    grid: [] as number[][],
 });
 
 const starterGrid: number[][] = [];
@@ -27,8 +24,29 @@ function App() {
 
     const [grid, setGrid] = useState<number[][]>(starterGrid);
 
+    function updateGrid(x: number, y: number, value: number): void {
+        console.log("updateGrid()");
+        const newGrid = [...grid]; // Create a new copy of grid
+        newGrid[y][x] = value;
+
+        if (y > 0) {
+            newGrid[y - 1][x] = newGrid[y - 1][x] == 0 ? 1 : 0;
+        } 
+        if (y < 4) {
+            newGrid[y + 1][x] = newGrid[y + 1][x] == 0 ? 1 : 0;
+        }
+        if (x > 0) {
+            newGrid[y][x - 1] = newGrid[y][x - 1] == 0 ? 1 : 0;
+        } 
+        if (x < 4) {
+            newGrid[y][x + 1] = newGrid[y][x + 1] == 0 ? 1 : 0;
+        }
+
+        setGrid(newGrid); // Update grid with the new copy
+    }
+
     return (
-        <gridContext.Provider value={{grid, setGrid}}>
+        <gridContext.Provider value={{updateGrid, grid}}>
             <CellContainer></CellContainer>
         </gridContext.Provider>
 
