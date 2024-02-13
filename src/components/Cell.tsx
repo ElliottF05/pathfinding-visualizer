@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import classNames from "classnames";
 import { gridContext } from "../App";
 
-function Cell({x, y} : {x: number, y: number}) {
+function Cell({x, y, gridWidth} : {x: number, y: number, gridWidth: number}) {
 
     const {updateGrid, grid} = useContext(gridContext);
     const [cellValue, setCellValue] = useState(grid[y][x]);
@@ -33,7 +33,7 @@ function Cell({x, y} : {x: number, y: number}) {
         }
     }
 
-    return <div className={CellClass} onClick={handleClick}><span></span></div>;
+    return <div className={CellClass} onClick={handleClick} style={{width: (100.0/gridWidth + "%")}}></div>;
 }
 
 export default Cell;
