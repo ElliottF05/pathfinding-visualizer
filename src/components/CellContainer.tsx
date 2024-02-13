@@ -4,17 +4,17 @@ import "./CellContainer.css";
 
 function CellContainer() {
 
-    const CellArr = [];
+    const cellArr = [];
 
     for (let i = 0; i < 5; i++) {
-        const CellRow = [];
+        const cellRow = [];
         for (let j = 0; j < 5; j++) {
-            CellRow.push(<Cell key={i*5 + j} x={j} y={i}></Cell>)
+            cellRow.push(<Cell key={i*5 + j} x={j} y={i}></Cell>)
         }
-        CellArr.push(<div className="CellRow">{CellRow}</div>);
+        cellArr.push(<div className="CellRow">{cellRow}</div>);
     }
 
-    return <div className="CellContainer">{CellArr}</div>;
+    return <div className="CellContainer">{cellArr}</div>;
 }
 
 export default CellContainer;

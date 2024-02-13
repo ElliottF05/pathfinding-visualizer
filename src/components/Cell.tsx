@@ -1,22 +1,33 @@
 import "./Cell.css";
+import { useContext } from "react";
 import { useState } from "react";
 import classNames from "classnames";
+import { gridContext } from "../App";
 
 function Cell({x, y} : {x: number, y: number}) {
 
-    const [cellState, setCellState] = useState("unchecked");
+    const {grid, setGrid} = useContext(gridContext);
+    const [cellValue, setCellValue] = useState(0);
+
+    function updateCellValue(value: number) {
+        grid[y][x] = value;
+        setCellValue(value);
+        setGrid(grid);
+    }
 
     const CellClass = classNames({
         "Cell": true,
-        "CellChecked": cellState == "checked",
+        "CellChecked": cellValue != 0,
     });
 
     function handleClick() {
-        if (cellState == "unchecked") {
-            setCellState("checked");
+        console.log(cellValue);
+        console.log(CellClass);
+        if (cellValue == 0) {
+            updateCellValue(1);
         }
-        else if (cellState == "checked") {
-            setCellState("unchecked");
+        else if (cellValue != 0) {
+            updateCellValue(0);
         }
     }
 
