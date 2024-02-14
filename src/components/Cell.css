@@ -18,3 +18,7 @@
 .StartCell {
     background-color: rgb(242, 255, 0);;
 }
+
+.EndCell {
+    background-color: rgb(228, 119, 119);
+}

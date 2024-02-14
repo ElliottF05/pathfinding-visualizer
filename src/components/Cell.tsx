@@ -30,6 +30,7 @@ function Cell({x, y, gridWidth} : {x: number, y: number, gridWidth: number}) {
         "Cell": true,
         "CellDrawn": cellValue > 0,
         "StartCell": cellValue == -1,
+        "EndCell": cellValue == -2,
     });
 
     function handleClick() {
@@ -42,14 +43,8 @@ function Cell({x, y, gridWidth} : {x: number, y: number, gridWidth: number}) {
     }
 
     function onMouseOver() {
-        return;
         if (mouseDown) {
-            if (cellValue == 0) {
-                setCellValue(1);
-            }
-            else if (cellValue != 0) {
-                setCellValue(0);
-            }
+            updateGrid(x, y, 1);
         }
     }
 

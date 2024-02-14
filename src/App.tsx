@@ -3,6 +3,7 @@ import { createContext } from "react";
 
 import CellContainer from "./components/CellContainer";
 import "./App.css";
+import { getData, step } from "./components/dijkstra"
 import ControlPanel from "./components/ControlPanel";
 
 
@@ -19,12 +20,7 @@ let startCell = [0,0];
 let endCell = [0,0];
 
 
-
-// LOGIC FUNCTIONS
-function setStatus(newStatus: number) {
-    status = newStatus;
-}
-
+// GET STARTED GRID()
 function getStarterGrid(): number[][] {
     const starterGrid: number[][] = [];
     for (let y = 0; y < gridHeight; y++) {
@@ -60,10 +56,55 @@ function App() {
         setGrid(newGrid);
     }
 
+    // RUN SIMULATION
+    async function runSimulation() {
+
+        let counter = 0
+
+        while (counter < 10) {
+            const newGrid = [...grid];
+            const data: number[] = await step()
+            console.log(data);
+            newGrid[data[1] + counter][data[0]] = 1;
+            setGrid(newGrid);
+            console.log(newGrid.toString());
+            counter++;
+        }
+    }
+
+    // SET STATUS
+    function setStatus(newStatus: number) {
+        status = newStatus;
+
+        if (newStatus == 1) { // set start
+            const newGrid = [...grid];
+            newGrid[startCell[1]][startCell[0]] = 0;
+            setGrid(newGrid);
+        }
+        else if (newStatus == 2) { // set end
+            const newGrid = [...grid];
+            newGrid[endCell[1]][endCell[0]] = 0;
+            setGrid(newGrid);
+        }
+
+        else if (newStatus == 3) { // start simulation
+
+            getData(startCell, endCell);
+
+            runSimulation();
+        }
+
+    }
+
 
     // MAIN UPDATE GRID FUNCTION (based on input)
     function updateGrid(x: number, y: number, value: number): void {
+
         console.log("updateGrid()");
+
+        if (grid[y][x] < 0) {
+            return;
+        }
 
         const newGrid = [...grid];
 
@@ -92,7 +133,6 @@ function App() {
                 <CellContainer gridWidth={gridWidth} gridHeight={gridHeight}></CellContainer>
             </div>
         </gridContext.Provider>
-
     );
 }
 
