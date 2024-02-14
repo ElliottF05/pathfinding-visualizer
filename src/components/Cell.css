@@ -8,9 +8,13 @@
 }
 
 .Cell:hover {
-    background-color: rgb(242, 255, 0);
+    filter: brightness(85%);
 }
 
-.CellChecked {
+.CellDrawn {
     background-color: rgb(96, 96, 96);
+}
+
+.StartCell {
+    background-color: rgb(242, 255, 0);;
 }
