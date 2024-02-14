@@ -1,5 +1,6 @@
 #control-panel {
-    width: 100px
+    width: 100px;
+    padding: 20px;
 }
 
 #speed-slider {

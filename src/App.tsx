@@ -64,10 +64,8 @@ function App() {
         while (counter < 10) {
             const newGrid = [...grid];
             const data: number[] = await step()
-            console.log(data);
             newGrid[data[1] + counter][data[0]] = 1;
             setGrid(newGrid);
-            console.log(newGrid.toString());
             counter++;
         }
     }
