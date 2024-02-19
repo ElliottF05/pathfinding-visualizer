@@ -3,30 +3,31 @@ import { createContext } from "react";
 
 import CellContainer from "./components/CellContainer";
 import "./App.css";
-import { getData, step } from "./components/dijkstra"
+import { setData, step, setConfig } from "./components/dijkstra"
 import ControlPanel from "./components/ControlPanel";
 
 
 
 // CONFIG
-let gridWidth = 20;
-let gridHeight = 20;
+const gridWidth = 20;
+const gridHeight = 20;
+setConfig(gridWidth, gridHeight);
 
 
 
 // LOGIC VALUES
 let status = 1;
-let startCell = [0,0];
-let endCell = [0,0];
+let startCell = [-1,-1];
+let endCell = [-1,-1];
 
 
-// GET STARTED GRID()
-function getStarterGrid(): number[][] {
+// GET STARTER GRID()
+function getStarterGrid(defaultVal: number): number[][] {
     const starterGrid: number[][] = [];
     for (let y = 0; y < gridHeight; y++) {
         const starterRow: number[] = [];
         for (let x = 0; x < gridWidth; x++) {
-            starterRow.push(0);
+            starterRow.push(defaultVal);
         }
         starterGrid.push(starterRow); 
     }
@@ -39,6 +40,8 @@ export const gridContext = createContext({
         x + y + value;
     },
     grid: [] as number[][],
+    nodeMapGrid: [] as number[][],
+    nodeStatusGrid: [] as number[][],
 });
 
 
@@ -46,13 +49,15 @@ export const gridContext = createContext({
 function App() {
 
     // USE STATE FOR GRID
-    const [grid, setGrid] = useState<number[][]>(getStarterGrid());
+    const [grid, setGrid] = useState<number[][]>(getStarterGrid(1));
+    const [nodeMapGrid, setNodeMapGrid] = useState<number[][]>(getStarterGrid(0));
+    const [nodeStatusGrid, setNodeStatusGrid] = useState<number[][]>(getStarterGrid(0));
 
     
     // RESET GRID
     function resetGrid() {
         console.log("reset grid");
-        const newGrid = getStarterGrid();
+        const newGrid = getStarterGrid(1);
         setGrid(newGrid);
     }
 
@@ -61,13 +66,40 @@ function App() {
 
         let counter = 0
 
-        while (counter < 10) {
+        while (counter < 100) {
+
+            if (status == 0) {
+                break;
+            }
+
             const newGrid = [...grid];
-            const data: number[] = await step()
-            newGrid[data[1] + counter][data[0]] = 1;
+            const newNodeMapGrid = [...nodeMapGrid];
+
+            const [dijkstraX, dijkstraY, newDistance] = await step()
+
+            updateNodeStatusGrid();
+            nodeStatusGrid[dijkstraY][dijkstraX] = 1;
+
+            newNodeMapGrid[dijkstraY][dijkstraX] = newDistance;
+
             setGrid(newGrid);
+            setNodeMapGrid(newNodeMapGrid);
+            
             counter++;
         }
+    }
+
+    // UPDATE NODESTATUS GRID
+    function updateNodeStatusGrid(): void {
+        const newNodeStatusGrid = [...nodeStatusGrid];
+        for (let i = 0; i < gridHeight; i++) {
+            for (let j = 0; j < gridWidth; j++) {
+                if (newNodeStatusGrid[i][j] > 0) {
+                    newNodeStatusGrid[i][j] += 1;
+                }
+            }
+        }
+        setNodeStatusGrid(newNodeStatusGrid);
     }
 
     // SET STATUS
@@ -76,18 +108,18 @@ function App() {
 
         if (newStatus == 1) { // set start
             const newGrid = [...grid];
-            newGrid[startCell[1]][startCell[0]] = 0;
+            newGrid[startCell[1]][startCell[0]] = 1;
             setGrid(newGrid);
         }
         else if (newStatus == 2) { // set end
             const newGrid = [...grid];
-            newGrid[endCell[1]][endCell[0]] = 0;
+            newGrid[endCell[1]][endCell[0]] = 1;
             setGrid(newGrid);
         }
 
         else if (newStatus == 3) { // start simulation
 
-            getData(startCell, endCell);
+            setData(startCell, endCell, grid);
 
             runSimulation();
         }
@@ -95,7 +127,7 @@ function App() {
     }
 
 
-    // MAIN UPDATE GRID FUNCTION (based on input)
+    // MAIN UPDATE GRID FUNCTION FOR DRAWING (based on input)
     function updateGrid(x: number, y: number, value: number): void {
 
         console.log("updateGrid()");
@@ -125,7 +157,7 @@ function App() {
 
     // COMPONENT HTML
     return (
-        <gridContext.Provider value={{updateGrid, grid}}>
+        <gridContext.Provider value={{updateGrid, grid, nodeMapGrid, nodeStatusGrid}}>
             <div id="main-container">
                 <ControlPanel setStatus={setStatus} resetGrid={resetGrid}></ControlPanel>
                 <CellContainer gridWidth={gridWidth} gridHeight={gridHeight}></CellContainer>

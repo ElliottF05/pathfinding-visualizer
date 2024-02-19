@@ -13,13 +13,23 @@ document.onmouseup = () => {
 
 function Cell({x, y, gridWidth} : {x: number, y: number, gridWidth: number}) {
 
-    const {updateGrid, grid} = useContext(gridContext);
+    const {updateGrid, grid, nodeMapGrid, nodeStatusGrid} = useContext(gridContext);
     const [cellValue, setCellValue] = useState(grid[y][x]);
+    const [nodeDistance, setNodeDistance] = useState(0);
+    const [nodeStatus, setNodeStatus] = useState(0);
 
     useEffect(() => {
         setCellValue(grid[y][x])
     }, [grid[y][x]]
     );
+    useEffect(() => {
+        setNodeDistance(nodeMapGrid[y][x])
+    }, [nodeMapGrid[y][x]]
+    )
+    useEffect(() => {
+        setNodeStatus(nodeStatusGrid[y][x])
+    }, [nodeStatusGrid[y][x]]
+    )
 
     function updateCellValue(value: number) {
         grid;
@@ -28,9 +38,10 @@ function Cell({x, y, gridWidth} : {x: number, y: number, gridWidth: number}) {
 
     const CellClass = classNames({
         "Cell": true,
-        "CellDrawn": cellValue > 0,
+        "CellDrawn": cellValue > 1,
         "StartCell": cellValue == -1,
         "EndCell": cellValue == -2,
+        "Wall": cellValue == 0,
     });
 
     function handleClick() {
@@ -44,11 +55,30 @@ function Cell({x, y, gridWidth} : {x: number, y: number, gridWidth: number}) {
 
     function onMouseOver() {
         if (mouseDown) {
-            updateGrid(x, y, 1);
+            updateGrid(x, y, 0);
         }
     }
 
-    return <div className={CellClass} onClick={handleClick} onMouseOver={onMouseOver} style={{width: (100.0/gridWidth + "%")}}></div>;
+    return (
+        <div
+            className={CellClass} 
+            onClick={handleClick} 
+            onMouseOver={onMouseOver}
+            style={{width: (100.0/gridWidth + "%")}} >
+                {nodeDistance}
+            
+        </div>
+    );
 }
+
+/**
+ * <div
+        className={CellClass} 
+        onClick={handleClick} 
+        onMouseOver={onMouseOver} 
+        style={{width: (100.0/gridWidth + "%")}}>
+            {nodeDistance}
+    </div>
+ */
 
 export default Cell;

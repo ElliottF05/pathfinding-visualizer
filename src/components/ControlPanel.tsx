@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./ControlPanel.css";
+import { SyntheticEvent } from "react";
 
 type ControlPanelPropTypes = {
     setStatus: (newStatus: number) => void, 
@@ -11,6 +12,8 @@ function ControlPanel({setStatus, resetGrid} : ControlPanelPropTypes) {
     const [speed, setSpeed] = useState(1);
 
     function sliderOnChange(event) {
+        console.log(event);
+        console.log(typeof event);
         const newSpeed = parseInt(event.target.value);
         setSpeed(newSpeed);
     }
@@ -36,6 +39,11 @@ function ControlPanel({setStatus, resetGrid} : ControlPanelPropTypes) {
         setStatus(3);
     }
 
+    function endButton() {
+        console.log("end button");
+        setStatus(0);
+    }
+
     return (
         <div id="control-panel">
             <h2>Control Panel</h2>
@@ -43,6 +51,7 @@ function ControlPanel({setStatus, resetGrid} : ControlPanelPropTypes) {
             <button id="choose-start" onClick={chooseStartButton}>Choose Start</button>
             <button id="choose-end" onClick={chooseEndButton}>Choose End</button>
             <button id="start-button" onClick={startButton}>Start</button>
+            <button id="stop-button" onClick={endButton}>End</button>
             <input 
                 type="range" 
                 min="1" 

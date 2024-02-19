@@ -1,6 +1,6 @@
 .Cell {
     background-color: rgb(217, 217, 217);
-    width: 20%;
+    width: 100%;
     height: 100%;
     margin: 0px;
     padding: 0px;
@@ -21,4 +21,8 @@
 
 .EndCell {
     background-color: rgb(228, 119, 119);
+}
+
+.Wall {
+    background-color: rgb(96, 96, 96);;
 }
