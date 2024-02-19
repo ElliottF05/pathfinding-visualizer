@@ -7,6 +7,11 @@
     outline: 1px solid black;
 }
 
+.NodeStatusColor {
+    width: 100%;
+    height: 100%;
+}
+
 .Cell:hover {
     filter: brightness(85%);
 }

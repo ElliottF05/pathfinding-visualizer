@@ -84,6 +84,11 @@ function App() {
 
             setGrid(newGrid);
             setNodeMapGrid(newNodeMapGrid);
+
+            if (dijkstraX == endCell[0] && dijkstraY == endCell[1]) {
+                "found end";
+                break;
+            }
             
             counter++;
         }
