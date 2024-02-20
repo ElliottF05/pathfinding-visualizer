@@ -6,3 +6,8 @@
 #speed-slider {
     padding: 0px;
 }
+
+#select-algorith-form {
+    display: flex;
+    flex-direction: column;
+}

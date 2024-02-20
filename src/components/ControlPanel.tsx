@@ -1,13 +1,21 @@
 import { useState } from "react";
 import "./ControlPanel.css";
 
+const enum Algorithms {
+    Dijkstras,
+    AStar,
+}
+
 type ControlPanelPropTypes = {
     setStatus: (newStatus: number) => void, 
     resetGrid: () => void,
     setAppSpeed: (value: number) => void,
+    setAlgorithm: (algorithm: Algorithms) => void,
 }
 
-function ControlPanel({setStatus, resetGrid, setAppSpeed} : ControlPanelPropTypes) {
+let dijkstraChecked = true;
+
+function ControlPanel({setStatus, resetGrid, setAppSpeed, setAlgorithm} : ControlPanelPropTypes) {
 
     const [speed, setSpeed] = useState(1);
 
@@ -15,6 +23,19 @@ function ControlPanel({setStatus, resetGrid, setAppSpeed} : ControlPanelPropType
         const newSpeed = Math.round((Math.pow(1.1, parseInt(event.target.value))) * 100) / 100;
         setSpeed(newSpeed);
         setAppSpeed(newSpeed);
+    }
+
+    function selectAlgorithmForm(event): void {
+        if (event.target.value === "1") {
+            console.log("dijkstra's selected");
+            dijkstraChecked = true;
+            setAlgorithm(Algorithms["dijkstra's"]);
+
+        } else {
+            console.log("A* selected");
+            dijkstraChecked = false;
+            setAlgorithm(Algorithms["A*"]);
+        }
     }
 
     function clearButton() {
@@ -57,6 +78,17 @@ function ControlPanel({setStatus, resetGrid, setAppSpeed} : ControlPanelPropType
             <button id="start-button" onClick={startButton}>Start</button>
             <button id="stop-button" onClick={endButton}>End</button>
             <button id="restart-search" onClick={restartSearchButton}>Restart Search</button>
+            <p>Select Algorithm:</p>
+            <form id="select-algorithm-form">
+                <div>
+                    <input type="radio" name="algorithm-options" id="algorithms-option-1" value="1" checked={dijkstraChecked} onClick={selectAlgorithmForm}></input>
+                    <label htmlFor="algorithms-option-1">Dijkstra's</label>
+                </div>
+                <div>
+                    <input type="radio" name="algorithm-options" id="algorithms-option-2" value="2" onClick={selectAlgorithmForm}></input>
+                    <label htmlFor="algorithms-option-2">A*</label>
+                </div>
+            </form>
             <input 
                 type="range" 
                 min="0" 

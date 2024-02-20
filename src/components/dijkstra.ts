@@ -1,7 +1,12 @@
 import { MinPriorityQueue } from "@datastructures-js/priority-queue";
 
+const enum Algorithms {
+    Dijkstras,
+    AStar,
+}
+
 // LOCAL VARIABLES
-const priorityQueue = new MinPriorityQueue<number[]>((arr: number[]) => arr[2]);
+const priorityQueue = new MinPriorityQueue<number[]>((arr: number[]) => arr[3]);
 const nodeMap: number[][] = [];
 const nodeReachedFrom: number[][][] = []
 
@@ -12,7 +17,7 @@ let delay = 1000;
 
 let gridWidth: number;
 let gridHeight: number;
-
+let algorithm: Algorithms = Algorithms.Dijkstras;
 
 
 // SETTING INITIAL CONFIG FROM APP
@@ -23,11 +28,12 @@ export function setConfig(inputGridWidth: number, inputGridHeight: number) {
 
 
 // ACQUIRING DATA FROM APP
-export function setData(inputStartCell: number[], inputEndCell: number[], inputGrid: number[][]) {
+export function setData(inputStartCell: number[], inputEndCell: number[], inputGrid: number[][], inputAlgorithm: Algorithms) {
     console.log("set data")
     startCell = inputStartCell;
     endCell = inputEndCell;
     grid = inputGrid;
+    algorithm = inputAlgorithm;
 
     // resetting nodeMap
     nodeMap.length = 0;
@@ -51,7 +57,7 @@ export function setData(inputStartCell: number[], inputEndCell: number[], inputG
 
     // resetting priority queue
     priorityQueue.clear();
-    priorityQueue.enqueue([startCell[0], startCell[1], 0])
+    priorityQueue.enqueue([startCell[0], startCell[1], 0, 0])
 }
 
 export function setDelay(value: number) {
@@ -86,6 +92,14 @@ export async function step(): Promise<number[]> {
         return [x, y, newDistance];
     }
 
+    function calculatePriority() {
+        if (algorithm == Algorithms.Dijkstras) {
+            return newDistance;
+        } else {
+            return newDistance + Math.abs(x - endCell[0]) + Math.abs(y - endCell[1]);
+        }
+    }
+
     function traverseDirections(x: number, y: number, x0: number, y0: number) {
         if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight // in bounds
             && grid[y][x] != 0 // not a wall
@@ -93,7 +107,7 @@ export async function step(): Promise<number[]> {
             {
             nodeMap[y][x] = newDistance;
             nodeReachedFrom[y][x] = [x0, y0];
-            priorityQueue.enqueue([x, y, newDistance]);
+            priorityQueue.enqueue([x, y, newDistance, calculatePriority()]);
         }
     }
 

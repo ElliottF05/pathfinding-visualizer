@@ -33,6 +33,7 @@ function Cell({x, y, gridWidth} : {x: number, y: number, gridWidth: number}) {
 
     function updateCellValue(value: number) {
         grid;
+        nodeDistance;
         updateGrid(x, y, value);
     }
 

@@ -21,6 +21,13 @@ let startCell = [-1,-1];
 let endCell = [-1,-1];
 let speed = 1;
 
+const enum Algorithms {
+    Dijkstras,
+    AStar,
+}
+
+let algorithm = Algorithms.Dijkstras;
+
 
 // GET STARTER GRID()
 function getStarterGrid(defaultVal: number): number[][] {
@@ -57,9 +64,13 @@ function App() {
     
     // RESET GRID
     function resetGrid() {
+        startCell = [-1, -1];
+        endCell = [-1, -1];
         console.log("reset grid");
         const newGrid = getStarterGrid(1);
         setGrid(newGrid);
+        setNodeMapGrid(getStarterGrid(0));
+        setNodeStatusGrid(getStarterGrid(0));
     }
 
     // RUN SIMULATION
@@ -128,22 +139,27 @@ function App() {
         status = newStatus;
 
         if (newStatus == 1) { // set start
-            const newGrid = [...grid];
-            newGrid[startCell[1]][startCell[0]] = 1;
-            setGrid(newGrid);
+            if (startCell[0] >= 0) {
+                const newGrid = [...grid];
+                newGrid[startCell[1]][startCell[0]] = 1;
+                setGrid(newGrid);
+            }
         }
         else if (newStatus == 2) { // set end
-            const newGrid = [...grid];
-            newGrid[endCell[1]][endCell[0]] = 1;
-            setGrid(newGrid);
+            if (endCell[0] >= 0) {
+                const newGrid = [...grid];
+                newGrid[endCell[1]][endCell[0]] = 1;
+                setGrid(newGrid);
+            }
         }
         else if (newStatus == 3) { // start simulation
-            setData(startCell, endCell, grid);
+            setData(startCell, endCell, grid, algorithm);
             runSimulation();
         }
-        else if (newStatus == 4) {
+        else if (newStatus == 4) { // restart search
             setNodeMapGrid(getStarterGrid(0));
             setNodeStatusGrid(getStarterGrid(0));
+            resetGrid();
             status = 0;
         }
     }
@@ -151,6 +167,15 @@ function App() {
     function setAppSpeed(value: number) {
         speed = value;
         setDelay(1000 / speed);
+    }
+
+    function setAlgorithm(newAlgorithm: Algorithms) {
+        status = 0;
+        resetGrid();
+        setNodeMapGrid(getStarterGrid(0));
+        setNodeStatusGrid(getStarterGrid(0));
+        algorithm = newAlgorithm;
+        setData(startCell, endCell, grid, algorithm);
     }
 
 
@@ -186,7 +211,7 @@ function App() {
     return (
         <gridContext.Provider value={{updateGrid, grid, nodeMapGrid, nodeStatusGrid}}>
             <div id="main-container">
-                <ControlPanel setStatus={setStatus} resetGrid={resetGrid} setAppSpeed={setAppSpeed}></ControlPanel>
+                <ControlPanel setStatus={setStatus} resetGrid={resetGrid} setAppSpeed={setAppSpeed} setAlgorithm={setAlgorithm}></ControlPanel>
                 <CellContainer gridWidth={gridWidth} gridHeight={gridHeight}></CellContainer>
             </div>
         </gridContext.Provider>
