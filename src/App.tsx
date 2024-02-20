@@ -9,8 +9,8 @@ import ControlPanel from "./components/ControlPanel";
 
 
 // CONFIG
-const gridWidth = 20;
-const gridHeight = 20;
+const gridWidth = 40;
+const gridHeight = 40;
 setConfig(gridWidth, gridHeight);
 
 
@@ -67,7 +67,7 @@ function App() {
 
         let counter = 0
 
-        while (counter < 1000) {
+        while (counter < 10000) {
 
             if (status == 0) {
                 break;
