@@ -1,21 +1,20 @@
 import { useState } from "react";
 import "./ControlPanel.css";
-import { SyntheticEvent } from "react";
 
 type ControlPanelPropTypes = {
     setStatus: (newStatus: number) => void, 
     resetGrid: () => void,
+    setAppSpeed: (value: number) => void,
 }
 
-function ControlPanel({setStatus, resetGrid} : ControlPanelPropTypes) {
+function ControlPanel({setStatus, resetGrid, setAppSpeed} : ControlPanelPropTypes) {
 
     const [speed, setSpeed] = useState(1);
 
     function sliderOnChange(event) {
-        console.log(event);
-        console.log(typeof event);
-        const newSpeed = parseInt(event.target.value);
+        const newSpeed = Math.round((Math.pow(1.1, parseInt(event.target.value))) * 100) / 100;
         setSpeed(newSpeed);
+        setAppSpeed(newSpeed);
     }
 
     function clearButton() {
@@ -44,6 +43,11 @@ function ControlPanel({setStatus, resetGrid} : ControlPanelPropTypes) {
         setStatus(0);
     }
 
+    function restartSearchButton() {
+        console.log("restart search");
+        setStatus(4);
+    }
+
     return (
         <div id="control-panel">
             <h2>Control Panel</h2>
@@ -52,15 +56,16 @@ function ControlPanel({setStatus, resetGrid} : ControlPanelPropTypes) {
             <button id="choose-end" onClick={chooseEndButton}>Choose End</button>
             <button id="start-button" onClick={startButton}>Start</button>
             <button id="stop-button" onClick={endButton}>End</button>
+            <button id="restart-search" onClick={restartSearchButton}>Restart Search</button>
             <input 
                 type="range" 
-                min="1" 
+                min="0" 
                 max="100" 
                 defaultValue={speed} 
                 id="speed-slider"
                 onChange={sliderOnChange}
                 ></input>
-            <span>speed: {speed}</span>
+            <span>speed: {speed - 1}</span>
         </div>
     )
 }

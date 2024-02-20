@@ -3,7 +3,7 @@ import { createContext } from "react";
 
 import CellContainer from "./components/CellContainer";
 import "./App.css";
-import { setData, step, setConfig } from "./components/dijkstra"
+import { setData, step, setConfig, getSuccessfulPath, setDelay } from "./components/dijkstra"
 import ControlPanel from "./components/ControlPanel";
 
 
@@ -19,6 +19,7 @@ setConfig(gridWidth, gridHeight);
 let status = 1;
 let startCell = [-1,-1];
 let endCell = [-1,-1];
+let speed = 1;
 
 
 // GET STARTER GRID()
@@ -49,9 +50,9 @@ export const gridContext = createContext({
 function App() {
 
     // USE STATE FOR GRID
-    const [grid, setGrid] = useState<number[][]>(getStarterGrid(1));
-    const [nodeMapGrid, setNodeMapGrid] = useState<number[][]>(getStarterGrid(0));
-    const [nodeStatusGrid, setNodeStatusGrid] = useState<number[][]>(getStarterGrid(0));
+    const [grid, setGrid] = useState<number[][]>(getStarterGrid(1)); // for drawing (setting start/end points and walls)
+    const [nodeMapGrid, setNodeMapGrid] = useState<number[][]>(getStarterGrid(0)); // distance from start
+    const [nodeStatusGrid, setNodeStatusGrid] = useState<number[][]>(getStarterGrid(0)); // node status in terms of how recently it was checked
 
     
     // RESET GRID
@@ -66,7 +67,7 @@ function App() {
 
         let counter = 0
 
-        while (counter < 100) {
+        while (counter < 1000) {
 
             if (status == 0) {
                 break;
@@ -76,6 +77,11 @@ function App() {
             const newNodeMapGrid = [...nodeMapGrid];
 
             const [dijkstraX, dijkstraY, newDistance] = await step()
+
+            if (newDistance == -1) { // path can't be found
+                status = 0;
+                break;
+            }
 
             updateNodeStatusGrid();
             nodeStatusGrid[dijkstraY][dijkstraX] = 1;
@@ -87,6 +93,16 @@ function App() {
 
             if (dijkstraX == endCell[0] && dijkstraY == endCell[1]) {
                 "found end";
+                const foundPathNodes: number[][] = getSuccessfulPath(); 
+                const newNodeStatusGrid = [...nodeStatusGrid];
+                console.log(foundPathNodes[0]);
+                for (let i = 0; i < foundPathNodes.length; i++) {
+                    const x = foundPathNodes[i][0];
+                    const y = foundPathNodes[i][1];
+                    console.log(x + ", " + y);
+                    newNodeStatusGrid[y][x] = -1
+                }
+                setNodeStatusGrid(newNodeStatusGrid);
                 break;
             }
             
@@ -121,14 +137,20 @@ function App() {
             newGrid[endCell[1]][endCell[0]] = 1;
             setGrid(newGrid);
         }
-
         else if (newStatus == 3) { // start simulation
-
             setData(startCell, endCell, grid);
-
             runSimulation();
         }
+        else if (newStatus == 4) {
+            setNodeMapGrid(getStarterGrid(0));
+            setNodeStatusGrid(getStarterGrid(0));
+            status = 0;
+        }
+    }
 
+    function setAppSpeed(value: number) {
+        speed = value;
+        setDelay(1000 / speed);
     }
 
 
@@ -164,7 +186,7 @@ function App() {
     return (
         <gridContext.Provider value={{updateGrid, grid, nodeMapGrid, nodeStatusGrid}}>
             <div id="main-container">
-                <ControlPanel setStatus={setStatus} resetGrid={resetGrid}></ControlPanel>
+                <ControlPanel setStatus={setStatus} resetGrid={resetGrid} setAppSpeed={setAppSpeed}></ControlPanel>
                 <CellContainer gridWidth={gridWidth} gridHeight={gridHeight}></CellContainer>
             </div>
         </gridContext.Provider>

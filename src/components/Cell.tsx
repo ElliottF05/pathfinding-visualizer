@@ -45,11 +45,13 @@ function Cell({x, y, gridWidth} : {x: number, y: number, gridWidth: number}) {
     });
 
     function getNodeStatusColor(): string {
-        if (nodeStatus == 0) {
-            return "rgba(0,0,0,0)"
+        if (nodeStatus == 0 || grid[y][x] <= 0) {
+            return "rgba(0,0,0,0)";
+        } else if (nodeStatus == -1) {
+            return "rgba(0,200,0,1)";
         }
         const status_color = 0.8 * Math.pow(1.02, -nodeStatus);
-        return `rgba(0,0,30,${status_color})`
+        return `rgba(0,0,30,${status_color})`;
     }
 
     function handleClick() {
@@ -76,7 +78,6 @@ function Cell({x, y, gridWidth} : {x: number, y: number, gridWidth: number}) {
 
                 <div className="NodeStatusColor"
                     style={{backgroundColor: getNodeStatusColor()}}>
-                    {nodeDistance}
                 </div>
             
         </div>
