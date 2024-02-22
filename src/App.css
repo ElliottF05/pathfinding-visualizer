@@ -2,6 +2,8 @@
     margin: 0px;
     padding: 10px;
     -webkit-user-drag: none;
+    -webkit-user-select: none;
+    
 }
 
 #main-container {
