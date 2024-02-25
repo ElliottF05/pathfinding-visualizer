@@ -1,0 +1,11 @@
+.cell-row {
+    display: flex;
+    flex-direction: row;
+}
+
+#Cell-Grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

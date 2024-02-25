@@ -123,15 +123,14 @@ function App() {
 
     // UPDATE NODESTATUS GRID
     function updateNodeStatusGrid(): void {
-        const newNodeStatusGrid = [...nodeStatusGrid];
         for (let i = 0; i < gridHeight; i++) {
             for (let j = 0; j < gridWidth; j++) {
-                if (newNodeStatusGrid[i][j] > 0) {
-                    newNodeStatusGrid[i][j] += 1;
+                if (nodeStatusGrid[i][j] > 0) {
+                    nodeStatusGrid[i][j] += 1;
                 }
             }
         }
-        setNodeStatusGrid(newNodeStatusGrid);
+        setNodeStatusGrid(nodeStatusGrid);
     }
 
     // SET STATUS

@@ -19,17 +19,20 @@ function Cell({x, y, gridWidth} : {x: number, y: number, gridWidth: number}) {
     const [nodeStatus, setNodeStatus] = useState(0);
 
     useEffect(() => {
-        setCellValue(grid[y][x])
-    }, [grid[y][x]]
+        setCellValue(grid[y][x]);
+        console.log("use effect grid[y][x]");
+    }, [grid[y][x] === cellValue]
     );
     useEffect(() => {
-        setNodeDistance(nodeMapGrid[y][x])
+        setNodeDistance(nodeMapGrid[y][x]);
+        console.log("use effect nodeMapGrid[y][x]");
     }, [nodeMapGrid[y][x]]
-    )
+    );
     useEffect(() => {
-        setNodeStatus(nodeStatusGrid[y][x])
+        setNodeStatus(nodeStatusGrid[y][x]);
+        console.log("use effect nodeStatusGrid[y][x]");
     }, [nodeStatusGrid[y][x]]
-    )
+    );
 
     function updateCellValue(value: number) {
         grid;

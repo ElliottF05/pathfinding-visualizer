@@ -1,0 +1,10 @@
+.cell {
+    width: 20px;
+    height: 20px;
+    background-color: rgb(211, 211, 211);
+    outline: black solid 1px;
+}
+
+.cell:hover {
+    filter: brightness(80%);
+}
