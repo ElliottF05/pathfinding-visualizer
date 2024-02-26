@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import Cell from "../Cell/Cell.tsx";
 import "./App.css";
+import ControlPanel from "../ControlPanel/ControlPanel.tsx";
+import { setForceUpdateGridFunction } from "../../data/grid.ts";
 
 // TODO: export to config file or grid.ts?
 const gridWidth = 30;
@@ -8,10 +10,16 @@ const gridHeight = 30;
 
 
 function App() {
-    useEffect(() => {}, [])
+    const [update, setUpdate] = useState(0);
+    setForceUpdateGridFunction(setUpdate);
+    update;
+    
 
     return (
-        <div>{createCellGrid()}</div>
+        <div id="Main-Container">
+            <ControlPanel></ControlPanel>
+            <div>{createCellGrid()}</div>
+        </div>
     );
 }
 

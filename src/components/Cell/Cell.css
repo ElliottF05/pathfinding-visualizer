@@ -12,3 +12,11 @@
 .wall {
     background-color: black;
 }
+
+.start-cell {
+    background-color: yellow;
+}
+
+.end-cell {
+    background-color: coral;
+}
