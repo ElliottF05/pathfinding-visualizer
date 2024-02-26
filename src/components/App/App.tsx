@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Cell from "../Cell/Cell.tsx";
 import "./App.css";
 
@@ -5,8 +6,13 @@ import "./App.css";
 const gridWidth = 30;
 const gridHeight = 30;
 
+
 function App() {
-    return <div>{createCellGrid()}</div>;
+    useEffect(() => {}, [])
+
+    return (
+        <div>{createCellGrid()}</div>
+    );
 }
 
 function createCellGrid() {
@@ -14,7 +20,7 @@ function createCellGrid() {
     function createCellRow(rowNumber: number) {
         const cellRow = [];
         for (let i = 0; i < gridWidth; i++) {
-            cellRow.push(<Cell key={rowNumber*gridWidth + i}></Cell>);
+            cellRow.push(<Cell key={rowNumber*gridWidth + i} x={i} y={rowNumber}></Cell>);
         }
         return <div className="cell-row">{cellRow}</div>
     }

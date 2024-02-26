@@ -8,3 +8,7 @@
 .cell:hover {
     filter: brightness(80%);
 }
+
+.wall {
+    background-color: black;
+}
