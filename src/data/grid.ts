@@ -147,6 +147,8 @@ export function handleCellClick(x: number, y: number) {
         status = Status.Idle;
 
     }
+
+    forceUpdateGrid();
 }
 
 export function handleControlPanelEvents(controlPanelEvent: ControlPanelEventTypes) {

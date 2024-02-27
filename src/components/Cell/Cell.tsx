@@ -1,11 +1,12 @@
 import classNames from "classnames";
 import "./Cell.css";
-import { getCellData, handleCellClick, updateQueued, CellType } from "../../data/grid";
-import { useState } from "react";
+import { getCellData, handleCellClick, CellType } from "../../data/grid";
+
+let mouseDown: boolean = false;
+document.body.onmousedown = () => mouseDown = true;
+document.body.onmouseup = () => mouseDown = false;
 
 function Cell({x, y} : {x: number, y: number}) {
-
-    const [update, setUpdate] = useState(0);
 
     const currentCell = getCellData(x, y);
     
@@ -20,13 +21,10 @@ function Cell({x, y} : {x: number, y: number}) {
 
     function handleClick() {
         handleCellClick(x, y);
-        if (updateQueued()) {
-            setUpdate(update + 1);
-        }
     }
 
 
-    return <div className={cellClasses} onClick={handleClick}>{x}, {y}</div>;
+    return <div className={cellClasses} onClick={handleClick} onMouseOver={() => {if (mouseDown) handleClick()}}>{x}, {y}</div>;
 }
 
 export default Cell;
