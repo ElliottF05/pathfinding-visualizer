@@ -7,7 +7,6 @@ const priorityQueue = new MinPriorityQueue<Cell>((currentCell: Cell) => currentC
 
 // API FUNCTIONS
 export async function step(): Promise<boolean> {
-    await sleep(1000);
     if (algorithm == Algorithms.Dijkstras) {
         return dijkstraStep();
     } else if (algorithm == Algorithms.Astar) {
@@ -16,7 +15,7 @@ export async function step(): Promise<boolean> {
     return false;
 }
 
-export function startSimulation() {
+export function setupSimulation() {
     grid[startCellPos[1]][startCellPos[0]].distance = 0;
     priorityQueue.enqueue(grid[startCellPos[1]][startCellPos[0]]);
 }
@@ -38,7 +37,6 @@ export function clearPriorityQueue() {
 
 // SLEEP FUNCTION
 export function sleep(delay: number) {
-    console.log("sleep");
     return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
@@ -61,7 +59,6 @@ function astarStep(useDijkstra?: boolean): boolean {
     }
 
     const currentCell: Cell = priorityQueue.dequeue();
-    console.log("priority: " + currentCell.priority);
     currentCell.status = 1;
     
     const newDistance: number = currentCell.distance + 1;

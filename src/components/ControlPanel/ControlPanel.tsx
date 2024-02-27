@@ -7,9 +7,10 @@ export enum ControlPanelEventTypes {
     setEndButtonClicked,
     clearButtonClicked,
     runButtonClicked,
-    RestartSimulationButtonClicked,
-    DijkstrasSelected,
-    AstarSelected,
+    pauseButtonClicked,
+    restartSimulationButtonClicked,
+    dijkstrasSelected,
+    astarSelected,
 }
 
 function ControlPanel() {
@@ -22,8 +23,8 @@ function ControlPanel() {
             <button id="Set-End-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.setEndButtonClicked)}>Set End</button>
             <button id="Clear-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.clearButtonClicked)}>Clear</button>
             <button id="Run-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.runButtonClicked)}>Run</button>
-            <button>Pause</button>
-            <button id="Restart-Simulation-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.RestartSimulationButtonClicked)}>Restart Simulation</button>
+            <button id="Pause-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.pauseButtonClicked)}>Pause</button>
+            <button id="Restart-Simulation-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.restartSimulationButtonClicked)}>Restart Simulation</button>
     
             <form id="Select-Algorithm-Form">
                 <div>
@@ -33,7 +34,7 @@ function ControlPanel() {
                         id="Select-Algorithm-Dijkstra"
                         defaultChecked={algorithmSelected == Algorithms.Dijkstras}
                         onClick={() => {
-                            handleControlPanelEvents(ControlPanelEventTypes.DijkstrasSelected);
+                            handleControlPanelEvents(ControlPanelEventTypes.dijkstrasSelected);
                             setAlgorithmSelected(Algorithms.Dijkstras);
                         }}
                         ></input>
@@ -46,7 +47,7 @@ function ControlPanel() {
                         id="Select-Algorithm-Astar"
                         defaultChecked={algorithmSelected == Algorithms.Astar}
                         onClick={() => {
-                            handleControlPanelEvents(ControlPanelEventTypes.AstarSelected);
+                            handleControlPanelEvents(ControlPanelEventTypes.astarSelected);
                             setAlgorithmSelected(Algorithms.Astar);
                         }}
                         ></input>

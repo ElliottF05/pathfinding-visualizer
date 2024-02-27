@@ -1,6 +1,6 @@
 // TYPES, ENUMS, INTERFACES
 
-import { clearPriorityQueue, startSimulation, step } from "./algorithms";
+import { clearPriorityQueue, setupSimulation, step, sleep } from "./algorithms";
 import { ControlPanelEventTypes } from "../components/ControlPanel/ControlPanel";
 
 export enum CellType {
@@ -83,6 +83,7 @@ function resetPathfindingData() { // resets distances and priorities
 }
 
 function forceUpdateGrid() {
+    console.log("force grid update");
     forceUpdateGridFunction(Math.random());
 }
 
@@ -126,7 +127,7 @@ export function handleCellClick(x: number, y: number) {
     if (status == Status.Idle) {
         if (grid[y][x].type == CellType.Wall) {
             grid[y][x].type = CellType.Empty;
-        } else {
+        } else if (grid[y][x].type == CellType.Empty) {
             grid[y][x].type = CellType.Wall;
         }
 
@@ -165,13 +166,18 @@ export async function handleControlPanelEvents(controlPanelEvent: ControlPanelEv
     } else if (controlPanelEvent == ControlPanelEventTypes.runButtonClicked) {
         handleRunButtonClick();
 
-    } else if (controlPanelEvent == ControlPanelEventTypes.RestartSimulationButtonClicked) {
+    } else if (controlPanelEvent == ControlPanelEventTypes.pauseButtonClicked) {
+        if (status == Status.Running) {
+            status = Status.Paused;
+        }
+
+    } else if (controlPanelEvent == ControlPanelEventTypes.restartSimulationButtonClicked) {
         handleRestartSimulationButtonClick();
 
-    } else if (controlPanelEvent == ControlPanelEventTypes.DijkstrasSelected) {
+    } else if (controlPanelEvent == ControlPanelEventTypes.dijkstrasSelected) {
         handleAlgorithmSelection(Algorithms.Dijkstras);
 
-    } else if (controlPanelEvent == ControlPanelEventTypes.AstarSelected) {
+    } else if (controlPanelEvent == ControlPanelEventTypes.astarSelected) {
         handleAlgorithmSelection(Algorithms.Astar);
     }
 }
@@ -225,21 +231,42 @@ export function updateQueued() {
 
 // SIMULATION FUNCTIONS
 async function handleSimulation() {
+
     if (status == Status.Idle) {
-        startSimulation();
+        setupSimulation();
     }
-    let counter = 0;
-    while (counter < 100) {
+
+    status = Status.Running;
+
+    let counter: number = 0;
+    let waitingForRender = false;
+    while (counter < 10000) {
         counter++;
+
+        if (!waitingForRender) {
+            waitingForRender = true;
+            sleep(100).then(() => {
+                forceUpdateGrid();
+                waitingForRender = false;
+            });
+        }
+
+        if (status != Status.Running) {
+            console.log("quitting simulation (no longer running)");
+            break;
+        }
 
         const stepResult: boolean = await step();
         if (stepResult == false) { // pathfinding algorithm reached end
             status = Status.Idle; 
             break;
         }
-        forceUpdateGrid();
+
+        await sleep(10);
     }
+
     forceUpdateGrid();
     status = Status.Paused;
+
     console.log("running concluded");
 }

@@ -3,7 +3,10 @@ import "./Cell.css";
 import { getCellData, handleCellClick, CellType } from "../../data/grid";
 
 let mouseDown: boolean = false;
-document.body.onmousedown = () => mouseDown = true;
+document.body.onmousedown = () => {
+    mouseDown = true;
+    //handleCellClick(x, y);
+};
 document.body.onmouseup = () => mouseDown = false;
 
 function Cell({x, y} : {x: number, y: number}) {
@@ -24,7 +27,13 @@ function Cell({x, y} : {x: number, y: number}) {
     }
 
 
-    return <div className={cellClasses} onClick={handleClick} onMouseOver={() => {if (mouseDown) handleClick()}}>{x}, {y}</div>;
+    return <div 
+        className={cellClasses} 
+        //onClick={handleClick} 
+        onMouseDown={handleClick}
+        onMouseOver={() => {if (mouseDown) handleClick()}}>
+            {x}, {y}
+        </div>;
 }
 
 export default Cell;
