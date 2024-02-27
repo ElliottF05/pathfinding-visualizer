@@ -20,3 +20,11 @@
 .end-cell {
     background-color: coral;
 }
+
+.cell-checked {
+    background-color: white;
+}
+
+.shortest-path-cell {
+    background-color: lime;
+}

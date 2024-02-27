@@ -14,6 +14,8 @@ function Cell({x, y} : {x: number, y: number}) {
         "wall": currentCell.type == CellType.Wall,
         "start-cell": currentCell.type == CellType.Start,
         "end-cell": currentCell.type == CellType.End,
+        "cell-checked": currentCell.status > 0,
+        "shortest-path-cell": currentCell.status == -1,
     });
 
     function handleClick() {

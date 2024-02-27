@@ -1,5 +1,7 @@
 // TYPES, ENUMS, INTERFACES
 
+import { startSimulation, step } from "./algorithms";
+
 export enum CellType {
     Start,
     End,
@@ -15,23 +17,34 @@ enum Status {
     Running,
 }
 
-interface Cell {
+export enum Algorithms {
+    Dijkstras,
+    Astar,
+}
+
+export interface Cell {
+    x: number,
+    y: number,
     type: CellType,
     distance: number,
-    status: number
+    status: number // 0 = default, -1 = path of shortest path, positive values = checked recently
+    priority: number;
+    previousX: number;
+    previousY: number;
 }
 
 
-// CONSTANTS
+// CONSTANTS & VARIABLES
 
-const gridWidth: number = 30;
-const gridHeight: number = 30;
+export const gridWidth: number = 30;
+export const gridHeight: number = 30;
 let status: Status = Status.Idle;
+export let algorithm: Algorithms = Algorithms.Dijkstras;
 let forceUpdateGridFunction: (value: number) => void;
-const startCellPos: number[] = [-1, -1];
-const endCellPos: number[] = [-1, -1];
+export const startCellPos: number[] = [-1, -1];
+export const endCellPos: number[] = [-1, -1];
 
-const grid: Cell[][] = [];
+export const grid: Cell[][] = [];
 resetGrid();
 
 
@@ -42,7 +55,15 @@ function resetGrid(): void {
     for (let i = 0; i < gridHeight; i++) {
         const temp: Cell[] = [];
         for (let j = 0; j < gridWidth; j++) {
-            temp.push({type: CellType.Empty, distance: 0, status: 0} as Cell)
+            temp.push({
+                x: j, 
+                y: i, 
+                type: CellType.Empty, 
+                distance: gridWidth*gridHeight, 
+                status: 0, 
+                priority: 0, 
+                previousX: -1, 
+                previousY: -1} as Cell)
         }
         grid.push(temp);
     }
@@ -70,8 +91,12 @@ function clearEndCell() {
 
 
 // EXPORTING DATA
-export function getCellData(x: number, y: number) {
+export function getCellData(x: number, y: number): Cell {
     return grid[y][x];
+}
+
+export function setCellData(x: number, y: number, newCellData: Cell): void {
+    grid[y][x] = newCellData;
 }
 
 // IMPORTING DATA
@@ -127,6 +152,29 @@ export function handleClearButtonClick() {
     status = Status.Idle;
 }
 
+export function handleRunButtonClick() {
+    console.log("run button clicked");
+
+    if ((status == Status.Idle || status == Status.Paused)
+    && (startCellPos[0] != -1 && endCellPos[0] != -1)) {
+        startSimulation();
+        let counter = 0;
+        while (counter < 100) {
+            counter++;
+            if (step() == false) {
+                break;
+            }
+        }
+        forceUpdateGrid();
+        console.log("running concluded");
+    } else {
+        console.log("run button failed");
+    }
+}
+
 export function updateQueued() {
     return true;
 }
+
+
+// PATHFINDING SIMULATION
