@@ -1,7 +1,7 @@
 .cell {
     width: 20px;
     height: 20px;
-    background-color: rgb(211, 211, 211);
+    background-color: rgb(220, 220, 220);
     outline: black solid 1px;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .cell-checked {
-    background-color: white;
+    background-color: rgb(220, 255, 220)
 }
 
 .shortest-path-cell {

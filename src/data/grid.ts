@@ -195,8 +195,7 @@ function handleClearButtonClick() {
 function handleRunButtonClick() {
     console.log("run button clicked");
 
-    if ((status == Status.Idle || status == Status.Paused)
-    && (startCellPos[0] != -1 && endCellPos[0] != -1)) {
+    if (startCellPos[0] != -1 && endCellPos[0] != -1) {
         handleSimulation();
     } else {
         console.log("run button failed");
@@ -204,7 +203,7 @@ function handleRunButtonClick() {
 }
 
 function handleRestartSimulationButtonClick() {
-    if (status == Status.Paused) {
+    if (status != Status.Running) {
         resetPathfindingData();
         clearPriorityQueue();
         forceUpdateGrid();

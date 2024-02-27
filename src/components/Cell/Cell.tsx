@@ -32,7 +32,6 @@ function Cell({x, y} : {x: number, y: number}) {
         //onClick={handleClick} 
         onMouseDown={handleClick}
         onMouseOver={() => {if (mouseDown) handleClick()}}>
-            {x}, {y}
         </div>;
 }
 

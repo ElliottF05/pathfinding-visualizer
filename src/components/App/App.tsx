@@ -2,11 +2,7 @@ import { useState } from "react";
 import Cell from "../Cell/Cell.tsx";
 import "./App.css";
 import ControlPanel from "../ControlPanel/ControlPanel.tsx";
-import { setForceUpdateGridFunction } from "../../data/grid.ts";
-
-// TODO: export to config file or grid.ts?
-const gridWidth = 30;
-const gridHeight = 30;
+import { setForceUpdateGridFunction, gridWidth, gridHeight } from "../../data/grid.ts";
 
 
 function App() {
