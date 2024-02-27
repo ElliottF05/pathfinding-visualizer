@@ -238,16 +238,18 @@ async function handleSimulation() {
     status = Status.Running;
 
     let counter: number = 0;
-    let waitingForRender = false;
-    while (counter < 10000) {
+    while (counter < 1000) {
         counter++;
 
-        if (!waitingForRender) {
-            waitingForRender = true;
-            sleep(100).then(() => {
-                forceUpdateGrid();
-                waitingForRender = false;
-            });
+        let numberOfSteps: number = 0;
+        while (numberOfSteps < 10) {
+            numberOfSteps++;
+            const stepResult: boolean = step();
+            if (stepResult == false) { // pathfinding algorithm reached end
+                status = Status.Idle; 
+                break;
+            }
+    
         }
 
         if (status != Status.Running) {
@@ -255,13 +257,8 @@ async function handleSimulation() {
             break;
         }
 
-        const stepResult: boolean = await step();
-        if (stepResult == false) { // pathfinding algorithm reached end
-            status = Status.Idle; 
-            break;
-        }
-
-        await sleep(10);
+        await sleep(50);
+        forceUpdateGrid();
     }
 
     forceUpdateGrid();
@@ -269,3 +266,14 @@ async function handleSimulation() {
 
     console.log("running concluded");
 }
+
+
+/*
+ * if (!waitingForRender) {
+            waitingForRender = true;
+            sleep(50).then(() => {
+                forceUpdateGrid();
+                waitingForRender = false;
+            });
+        }
+ */

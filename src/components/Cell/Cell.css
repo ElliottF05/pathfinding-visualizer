@@ -23,7 +23,7 @@
 }
 
 .cell-checked {
-    background-color: rgb(220, 255, 220)
+    background-color: rgb(120, 120, 120);
 }
 
 .shortest-path-cell {

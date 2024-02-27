@@ -6,7 +6,7 @@ import { grid, gridWidth, gridHeight, startCellPos, endCellPos, algorithm, Algor
 const priorityQueue = new MinPriorityQueue<Cell>((currentCell: Cell) => currentCell.priority);
 
 // API FUNCTIONS
-export async function step(): Promise<boolean> {
+export function step(): boolean {
     if (algorithm == Algorithms.Dijkstras) {
         return dijkstraStep();
     } else if (algorithm == Algorithms.Astar) {
