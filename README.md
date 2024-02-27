@@ -4,6 +4,8 @@ Web app built with React that visualizes pathfinding algorithms
 
 ## Specific Todo-List
 
+-   Re-rendering entire grid every frame is too slow, must keep track of which cells changed and render those specifically!!! (this will be challenging)
+
 ## General Todo-List
 
 -   Improve code architecture (interactions between components, shared state, etc)
