@@ -30,8 +30,12 @@ function Cell({x, y} : {x: number, y: number}) {
     return <div 
         className={cellClasses} 
         //onClick={handleClick} 
-        onMouseDown={handleClick}
-        onMouseOver={() => {if (mouseDown) handleClick()}}>
+        onMouseDown={() => {
+            event?.preventDefault();
+            handleClick();
+        }}
+        onMouseOver={() => {if (mouseDown) handleClick()}}
+        draggable="false">
         </div>;
 }
 

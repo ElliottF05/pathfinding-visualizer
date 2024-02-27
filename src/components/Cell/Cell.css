@@ -3,6 +3,7 @@
     height: 20px;
     background-color: rgb(220, 220, 220);
     outline: black solid 1px;
+    -webkit-user-drag: none;
 }
 
 .cell:hover {
