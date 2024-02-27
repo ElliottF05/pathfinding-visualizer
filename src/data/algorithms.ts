@@ -6,9 +6,9 @@ import { grid, gridWidth, gridHeight, startCellPos, endCellPos, algorithm, Algor
 const priorityQueue = new MinPriorityQueue<Cell>((currentCell: Cell) => currentCell.priority);
 
 // API FUNCTIONS
-export function step(): boolean {
+export async function step(): Promise<boolean> {
+    await sleep(1000);
     if (algorithm == Algorithms.Dijkstras) {
-        console.log("in dijkstras")
         return dijkstraStep();
     } else if (algorithm == Algorithms.Astar) {
         return astarStep();
@@ -37,8 +37,9 @@ export function clearPriorityQueue() {
 }
 
 // SLEEP FUNCTION
-function sleep(delay: number) {
-    new Promise((resolve) => setTimeout(resolve, delay));
+export function sleep(delay: number) {
+    console.log("sleep");
+    return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
 

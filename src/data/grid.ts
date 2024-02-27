@@ -151,7 +151,7 @@ export function handleCellClick(x: number, y: number) {
     forceUpdateGrid();
 }
 
-export function handleControlPanelEvents(controlPanelEvent: ControlPanelEventTypes) {
+export async function handleControlPanelEvents(controlPanelEvent: ControlPanelEventTypes) {
 
     if (controlPanelEvent == ControlPanelEventTypes.setStartButtonClicked) {
         status = Status.SelectingStart;
@@ -191,21 +191,7 @@ function handleRunButtonClick() {
 
     if ((status == Status.Idle || status == Status.Paused)
     && (startCellPos[0] != -1 && endCellPos[0] != -1)) {
-        // TODO: extract this into its own runSimulation() function
-        if (status == Status.Idle) {
-            startSimulation();
-        }
-        let counter = 0;
-        while (counter < 100) {
-            counter++;
-            if (step() == false) { // pathfinding algorithm reached end
-                status = Status.Idle; 
-                break;
-            }
-        }
-        forceUpdateGrid();
-        status = Status.Paused;
-        console.log("running concluded");
+        handleSimulation();
     } else {
         console.log("run button failed");
     }
@@ -234,4 +220,26 @@ function handleAlgorithmSelection(selectedAlgorithm: Algorithms) {
 
 export function updateQueued() {
     return true;
+}
+
+
+// SIMULATION FUNCTIONS
+async function handleSimulation() {
+    if (status == Status.Idle) {
+        startSimulation();
+    }
+    let counter = 0;
+    while (counter < 100) {
+        counter++;
+
+        const stepResult: boolean = await step();
+        if (stepResult == false) { // pathfinding algorithm reached end
+            status = Status.Idle; 
+            break;
+        }
+        forceUpdateGrid();
+    }
+    forceUpdateGrid();
+    status = Status.Paused;
+    console.log("running concluded");
 }
