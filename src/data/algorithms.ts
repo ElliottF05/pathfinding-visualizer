@@ -1,5 +1,5 @@
 import { MinPriorityQueue } from "@datastructures-js/priority-queue";
-import { grid, gridWidth, gridHeight, startCellPos, endCellPos, algorithm, getCellData, setCellData, Algorithms, Cell} from "./grid";
+import { grid, gridWidth, gridHeight, startCellPos, endCellPos, algorithm, getCellData, setCellData, Algorithms, Cell, CellType} from "./grid";
 
 
 // CONSTANTS AND VARIABLES
@@ -30,6 +30,10 @@ export function highlightPath() {
         pathX = currentCell.previousX;
         pathY = currentCell.previousY;
     }
+}
+
+export function clearPriorityQueue() {
+    priorityQueue.clear();
 }
 
 // SLEEP FUNCTION
@@ -73,6 +77,9 @@ function astarStep(useDijkstra?: boolean): boolean {
             return;
         }
         if (newy < 0 || newy >= gridHeight) { // y out of bounds
+            return;
+        }
+        if (grid[newy][newx].type == CellType.Wall) { // cell is wall
             return;
         }
         if (grid[newy][newx].distance <= newDistance) { // better path already found

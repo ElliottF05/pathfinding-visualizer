@@ -1,6 +1,6 @@
 // TYPES, ENUMS, INTERFACES
 
-import { startSimulation, step } from "./algorithms";
+import { clearPriorityQueue, startSimulation, step } from "./algorithms";
 
 export enum CellType {
     Start,
@@ -66,6 +66,18 @@ function resetGrid(): void {
                 previousY: -1} as Cell)
         }
         grid.push(temp);
+    }
+}
+
+function resetPathfindingData() { // resets distances and priorities
+    for (let i = 0; i < gridHeight; i++) {
+        for (let j = 0; j < gridWidth; j++) {
+            grid[i][j].distance = gridWidth*gridHeight;
+            grid[i][j].status = 0;
+            grid[i][j].previousX = -1;
+            grid[i][j].previousY = -1;
+            grid[i][j].priority = 0;
+        }
     }
 }
 
@@ -157,24 +169,37 @@ export function handleRunButtonClick() {
 
     if ((status == Status.Idle || status == Status.Paused)
     && (startCellPos[0] != -1 && endCellPos[0] != -1)) {
-        startSimulation();
+        // TODO: extract this into its own runSimulation() function
+        if (status == Status.Idle) {
+            startSimulation();
+        }
         let counter = 0;
         while (counter < 100) {
             counter++;
-            if (step() == false) {
+            if (step() == false) { // pathfinding algorithm reached end
+                status = Status.Idle; 
                 break;
             }
         }
         forceUpdateGrid();
+        status = Status.Paused;
         console.log("running concluded");
     } else {
         console.log("run button failed");
     }
 }
 
+export function handleRestartSimulationButtonClick() {
+    if (status == Status.Paused) {
+        resetPathfindingData();
+        clearPriorityQueue();
+        forceUpdateGrid();
+        status = Status.Idle;
+    } else {
+        console.log("restart simulation failed");
+    }
+}
+
 export function updateQueued() {
     return true;
 }
-
-
-// PATHFINDING SIMULATION

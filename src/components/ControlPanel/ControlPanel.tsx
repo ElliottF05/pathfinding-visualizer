@@ -1,4 +1,4 @@
-import { handleSetStartCellClick, handleSetEndCellClick, handleClearButtonClick, handleRunButtonClick } from "../../data/grid";
+import { handleSetStartCellClick, handleSetEndCellClick, handleClearButtonClick, handleRunButtonClick, handleRestartSimulationButtonClick } from "../../data/grid";
 
 function ControlPanel() {
     return (
@@ -8,7 +8,7 @@ function ControlPanel() {
             <button id="Clear-Button" onClick={clearButton}>Clear</button>
             <button id="Run-Button" onClick={handleRunButton}>Run</button>
             <button>Pause</button>
-            <button>Restart Simulation</button>
+            <button id="Restart-Simulation-Button" onClick={handleRestartSimulationButton}>Restart Simulation</button>
         </div>
     );
 }
@@ -27,6 +27,10 @@ function clearButton() {
 
 function handleRunButton() {
     handleRunButtonClick();
+}
+
+function handleRestartSimulationButton() {
+    handleRestartSimulationButtonClick();
 }
 
 export default ControlPanel;
