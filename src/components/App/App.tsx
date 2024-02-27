@@ -17,7 +17,9 @@ function App() {
 
     return (
         <div id="Main-Container">
-            <ControlPanel></ControlPanel>
+            <div id="Control-Panel-Wrapper">
+                <ControlPanel></ControlPanel>
+            </div>
             <div>{createCellGrid()}</div>
         </div>
     );

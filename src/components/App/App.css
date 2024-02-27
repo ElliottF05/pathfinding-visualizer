@@ -17,5 +17,8 @@
 
 #Main-Container {
     display: flex;
+}
+
+#Control-Panel-Wrapper {
     width: 100px;
 }
