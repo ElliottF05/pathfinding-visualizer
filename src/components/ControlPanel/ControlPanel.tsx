@@ -1,36 +1,24 @@
-import { handleSetStartCellClick, handleSetEndCellClick, handleClearButtonClick, handleRunButtonClick, handleRestartSimulationButtonClick } from "../../data/grid";
+import { handleControlPanelEvents } from "../../data/grid";
+
+export enum ControlPanelEventTypes {
+    setStartButtonClicked,
+    setEndButtonClicked,
+    clearButtonClicked,
+    runButtonClicked,
+    RestartSimulationButtonClicked,
+}
 
 function ControlPanel() {
     return (
         <div>
-            <button id="Set-Start-Button" onClick={setStartButton}>Set Start</button>
-            <button id="Set-End-Button" onClick={setEndButton}>Set End</button>
-            <button id="Clear-Button" onClick={clearButton}>Clear</button>
-            <button id="Run-Button" onClick={handleRunButton}>Run</button>
+            <button id="Set-Start-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.setStartButtonClicked)}>Set Start</button>
+            <button id="Set-End-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.setEndButtonClicked)}>Set End</button>
+            <button id="Clear-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.clearButtonClicked)}>Clear</button>
+            <button id="Run-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.runButtonClicked)}>Run</button>
             <button>Pause</button>
-            <button id="Restart-Simulation-Button" onClick={handleRestartSimulationButton}>Restart Simulation</button>
+            <button id="Restart-Simulation-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.RestartSimulationButtonClicked)}>Restart Simulation</button>
         </div>
     );
-}
-
-function setStartButton() {
-    handleSetStartCellClick();
-}
-
-function setEndButton() {
-    handleSetEndCellClick();
-}
-
-function clearButton() {
-    handleClearButtonClick();
-}
-
-function handleRunButton() {
-    handleRunButtonClick();
-}
-
-function handleRestartSimulationButton() {
-    handleRestartSimulationButtonClick();
 }
 
 export default ControlPanel;

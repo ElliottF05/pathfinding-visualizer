@@ -1,6 +1,7 @@
 // TYPES, ENUMS, INTERFACES
 
 import { clearPriorityQueue, startSimulation, step } from "./algorithms";
+import { ControlPanelEventTypes } from "../components/ControlPanel/ControlPanel";
 
 export enum CellType {
     Start,
@@ -146,15 +147,26 @@ export function handleCellClick(x: number, y: number) {
     }
 }
 
-export function handleSetStartCellClick() {
-    status = Status.SelectingStart;
+export function handleControlPanelEvents(controlPanelEvent: ControlPanelEventTypes) {
+
+    if (controlPanelEvent == ControlPanelEventTypes.setStartButtonClicked) {
+        status = Status.SelectingStart;
+
+    } else if (controlPanelEvent == ControlPanelEventTypes.setEndButtonClicked) {
+        status = Status.SelectingEnd;
+
+    } else if (controlPanelEvent == ControlPanelEventTypes.clearButtonClicked) {
+        handleClearButtonClick();
+
+    } else if (controlPanelEvent == ControlPanelEventTypes.runButtonClicked) {
+        handleRunButtonClick();
+
+    } else if (controlPanelEvent == ControlPanelEventTypes.RestartSimulationButtonClicked) {
+        handleRestartSimulationButtonClick();
+    }
 }
 
-export function handleSetEndCellClick() {
-    status = Status.SelectingEnd;
-}
-
-export function handleClearButtonClick() {
+function handleClearButtonClick() {
     resetGrid();
     forceUpdateGrid();
     startCellPos[0] = 0;
@@ -164,7 +176,7 @@ export function handleClearButtonClick() {
     status = Status.Idle;
 }
 
-export function handleRunButtonClick() {
+function handleRunButtonClick() {
     console.log("run button clicked");
 
     if ((status == Status.Idle || status == Status.Paused)
@@ -189,7 +201,7 @@ export function handleRunButtonClick() {
     }
 }
 
-export function handleRestartSimulationButtonClick() {
+function handleRestartSimulationButtonClick() {
     if (status == Status.Paused) {
         resetPathfindingData();
         clearPriorityQueue();

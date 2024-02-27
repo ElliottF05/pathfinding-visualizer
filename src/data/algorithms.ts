@@ -1,5 +1,5 @@
 import { MinPriorityQueue } from "@datastructures-js/priority-queue";
-import { grid, gridWidth, gridHeight, startCellPos, endCellPos, algorithm, getCellData, setCellData, Algorithms, Cell, CellType} from "./grid";
+import { grid, gridWidth, gridHeight, startCellPos, endCellPos, algorithm, Algorithms, Cell, CellType} from "./grid";
 
 
 // CONSTANTS AND VARIABLES
