@@ -1,4 +1,5 @@
-import { handleControlPanelEvents } from "../../data/grid";
+import { useState } from "react";
+import { handleControlPanelEvents, Algorithms } from "../../data/grid";
 import "./ControlPanel.css";
 
 export enum ControlPanelEventTypes {
@@ -7,9 +8,13 @@ export enum ControlPanelEventTypes {
     clearButtonClicked,
     runButtonClicked,
     RestartSimulationButtonClicked,
+    DijkstrasSelected,
+    AstarSelected,
 }
 
 function ControlPanel() {
+
+    const [algorithmSelected, setAlgorithmSelected] = useState(Algorithms.Dijkstras);
 
     return (
         <div>
@@ -26,6 +31,11 @@ function ControlPanel() {
                         type="radio" 
                         name="Select-Algorithm-Form"
                         id="Select-Algorithm-Dijkstra"
+                        defaultChecked={algorithmSelected == Algorithms.Dijkstras}
+                        onClick={() => {
+                            handleControlPanelEvents(ControlPanelEventTypes.DijkstrasSelected);
+                            setAlgorithmSelected(Algorithms.Dijkstras);
+                        }}
                         ></input>
                     <label htmlFor="Select-Algorithm-Dijkstra">Dijkstra's</label>
                 </div>
@@ -34,6 +44,11 @@ function ControlPanel() {
                         type="radio" 
                         name="Select-Algorithm-Form"
                         id="Select-Algorithm-Astar"
+                        defaultChecked={algorithmSelected == Algorithms.Astar}
+                        onClick={() => {
+                            handleControlPanelEvents(ControlPanelEventTypes.AstarSelected);
+                            setAlgorithmSelected(Algorithms.Astar);
+                        }}
                         ></input>
                     <label htmlFor="Select-Algorithm-Astar">A*</label>
                 </div>

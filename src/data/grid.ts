@@ -131,6 +131,7 @@ export function handleCellClick(x: number, y: number) {
         }
 
     } else if (status == Status.SelectingStart) {
+        resetPathfindingData();
         clearStartCell();
         startCellPos[0] = x;
         startCellPos[1] = y;
@@ -138,6 +139,7 @@ export function handleCellClick(x: number, y: number) {
         status = Status.Idle;
 
     } else if (status == Status.SelectingEnd) {
+        resetPathfindingData();
         clearEndCell();
         endCellPos[0] = x;
         endCellPos[1] = y;
@@ -163,6 +165,12 @@ export function handleControlPanelEvents(controlPanelEvent: ControlPanelEventTyp
 
     } else if (controlPanelEvent == ControlPanelEventTypes.RestartSimulationButtonClicked) {
         handleRestartSimulationButtonClick();
+
+    } else if (controlPanelEvent == ControlPanelEventTypes.DijkstrasSelected) {
+        handleAlgorithmSelection(Algorithms.Dijkstras);
+
+    } else if (controlPanelEvent == ControlPanelEventTypes.AstarSelected) {
+        handleAlgorithmSelection(Algorithms.Astar);
     }
 }
 
@@ -209,6 +217,16 @@ function handleRestartSimulationButtonClick() {
         status = Status.Idle;
     } else {
         console.log("restart simulation failed");
+    }
+}
+
+function handleAlgorithmSelection(selectedAlgorithm: Algorithms) {
+    if (status == Status.Running) {
+        console.log("failed algorithm selection (can't be running)");
+    } else {
+        console.log("changing algorithm to: " + ((selectedAlgorithm === Algorithms.Dijkstras) ? "dijkstra's" : "Astar"));
+        resetPathfindingData();
+        algorithm = selectedAlgorithm;
     }
 }
 
