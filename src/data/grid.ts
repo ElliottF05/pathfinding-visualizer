@@ -37,8 +37,8 @@ export interface Cell {
 
 // CONSTANTS & VARIABLES
 
-export const gridWidth: number = 30;
-export const gridHeight: number = 30;
+export let gridWidth: number = 50;
+export let gridHeight: number = 50;
 let status: Status = Status.Idle;
 export let algorithm: Algorithms = Algorithms.Dijkstras;
 let forceUpdateGridFunction: (value: number) => void;
@@ -68,6 +68,9 @@ function resetGrid(): void {
         }
         grid.push(temp);
     }
+    clearEndCell();
+    clearStartCell();
+    resetPathfindingData();
 }
 
 function resetPathfindingData() { // resets distances and priorities
@@ -80,6 +83,7 @@ function resetPathfindingData() { // resets distances and priorities
             grid[i][j].priority = 0;
         }
     }
+    clearPriorityQueue();
 }
 
 function forceUpdateGrid() {
@@ -100,6 +104,22 @@ function clearEndCell() {
     if (endCellPos[0] != -1) { // must reset end pos
         grid[endCellPos[1]][endCellPos[0]].type = CellType.Empty;
         forceUpdateGrid();
+    }
+}
+
+function randomizeGrid() {
+    const probability = 0.5 * Math.random();
+    for (let i = 0; i < gridHeight; i++) {
+        for (let j = 0; j < gridWidth; j++) {
+            const currentCell = grid[i][j];
+            if (currentCell.type == CellType.Empty || currentCell.type == CellType.Wall) {
+                if (Math.random() < probability) {
+                    currentCell.type = CellType.Wall;
+                } else {
+                    currentCell.type = CellType.Empty;
+                }
+            }
+        }
     }
 }
 
@@ -179,6 +199,27 @@ export async function handleControlPanelEvents(controlPanelEvent: ControlPanelEv
 
     } else if (controlPanelEvent == ControlPanelEventTypes.astarSelected) {
         handleAlgorithmSelection(Algorithms.Astar);
+
+    } else if (controlPanelEvent == ControlPanelEventTypes.increaseWidthClicked) {
+        handleWidthChanges(true);
+
+    } else if (controlPanelEvent == ControlPanelEventTypes.decreaseWidthClicked) {
+        handleWidthChanges(false);
+        
+    } else if (controlPanelEvent == ControlPanelEventTypes.increaseHeightClicked) {
+        handleHeightChanges(true);
+        
+    } else if (controlPanelEvent == ControlPanelEventTypes.decreaseHeightClicked) {
+        handleHeightChanges(false);
+        
+    } else if (controlPanelEvent == ControlPanelEventTypes.randomizeGridClicked) {
+        if (status != Status.Running) {
+            resetGrid();
+            randomizeGrid();
+            forceUpdateGrid();
+        }
+        status = Status.Idle;
+
     }
 }
 
@@ -221,6 +262,48 @@ function handleAlgorithmSelection(selectedAlgorithm: Algorithms) {
         resetPathfindingData();
         algorithm = selectedAlgorithm;
     }
+}
+
+function handleWidthChanges(increase: boolean) {
+
+    if (status == Status.Running) {
+        return;
+    }
+
+    if (increase) {
+        if (gridWidth < 100) {
+            gridWidth++;
+        } 
+    } else {
+        if (gridWidth > 1) {
+            gridWidth--;
+        }
+    }
+    resetGrid();
+    forceUpdateGrid();
+
+    status = Status.Idle;
+}
+
+function handleHeightChanges(increase: boolean) {
+
+    if (status == Status.Running) {
+        return;
+    }
+
+    if (increase) {
+        if (gridHeight < 100) {
+            gridHeight++;
+        } 
+    } else {
+        if (gridHeight > 1) {
+            gridHeight--;
+        }
+    }
+    resetGrid();
+    forceUpdateGrid();
+
+    status = Status.Idle;
 }
 
 export function updateQueued() {

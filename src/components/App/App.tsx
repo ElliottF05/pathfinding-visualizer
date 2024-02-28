@@ -13,10 +13,8 @@ function App() {
 
     return (
         <div id="Main-Container">
-            <div id="Control-Panel-Wrapper">
-                <ControlPanel></ControlPanel>
-            </div>
-            <div>{createCellGrid()}</div>
+            <ControlPanel></ControlPanel>
+            {createCellGrid()}
         </div>
     );
 }

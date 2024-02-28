@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import "./Cell.css";
-import { getCellData, handleCellClick, CellType } from "../../data/grid";
+import { getCellData, handleCellClick, CellType, gridHeight } from "../../data/grid";
 
 let mouseDown: boolean = false;
 document.body.onmousedown = () => {
@@ -29,13 +29,13 @@ function Cell({x, y} : {x: number, y: number}) {
 
     return <div 
         className={cellClasses} 
-        //onClick={handleClick} 
         onMouseDown={() => {
             event?.preventDefault();
             handleClick();
         }}
         onMouseOver={() => {if (mouseDown) handleClick()}}
-        draggable="false">
+        draggable="false"
+        style={{width: (90.0 / gridHeight) + "vh", height: (90.0 / gridHeight) + "vh"}}>
         </div>;
 }
 

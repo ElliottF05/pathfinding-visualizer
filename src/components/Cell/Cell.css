@@ -1,6 +1,6 @@
 .cell {
-    width: 20px;
-    height: 20px;
+    width: 3vh;
+    height: 3vh;
     background-color: rgb(220, 220, 220);
     outline: black solid 1px;
     -webkit-user-drag: none;
@@ -14,18 +14,18 @@
     background-color: black;
 }
 
-.start-cell {
-    background-color: yellow;
-}
-
-.end-cell {
-    background-color: coral;
-}
-
 .cell-checked {
     background-color: rgb(120, 120, 120);
 }
 
 .shortest-path-cell {
     background-color: lime;
+}
+
+.start-cell {
+    background-color: yellow;
+}
+
+.end-cell {
+    background-color: coral;
 }

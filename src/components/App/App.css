@@ -17,8 +17,5 @@
 
 #Main-Container {
     display: flex;
-}
-
-#Control-Panel-Wrapper {
-    width: 100px;
+    min-width: 800px;
 }
