@@ -4,7 +4,7 @@ Web app built with React that visualizes pathfinding algorithms
 
 ## Specific Todo-List
 
--   Add speed changes!
+-   Improve drawing functionality to avoid creating gaps
 
 ## General Todo-List
 
