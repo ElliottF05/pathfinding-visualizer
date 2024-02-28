@@ -170,7 +170,7 @@ export function handleCellClick(x: number, y: number, beginClick: boolean) {
 
     }
 
-    forceUpdateGrid();
+    //forceUpdateGrid();
 }
 
 export async function handleControlPanelEvents(controlPanelEvent: ControlPanelEventTypes) {

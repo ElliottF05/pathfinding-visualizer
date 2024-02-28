@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import "./Cell.css";
 import { getCellData, handleCellClick, CellType, gridHeight } from "../../data/grid";
+import { useState } from "react";
 
 let mouseDown: boolean = false;
 document.body.onmousedown = () => {
@@ -10,6 +11,8 @@ document.body.onmousedown = () => {
 document.body.onmouseup = () => mouseDown = false;
 
 function Cell({x, y} : {x: number, y: number}) {
+
+    const [update, setUpdate] = useState(0);
 
     const currentCell = getCellData(x, y);
     
@@ -22,8 +25,9 @@ function Cell({x, y} : {x: number, y: number}) {
         "shortest-path-cell": currentCell.status == -1,
     });
 
-    function handleClick(start: boolean) {
-        handleCellClick(x, y, start);
+    function handleClick(beginClick: boolean) {
+        handleCellClick(x, y, beginClick);
+        setUpdate(update + 1);
     }
 
 
