@@ -22,8 +22,8 @@ function Cell({x, y} : {x: number, y: number}) {
         "shortest-path-cell": currentCell.status == -1,
     });
 
-    function handleClick() {
-        handleCellClick(x, y);
+    function handleClick(start: boolean) {
+        handleCellClick(x, y, start);
     }
 
 
@@ -31,9 +31,9 @@ function Cell({x, y} : {x: number, y: number}) {
         className={cellClasses} 
         onMouseDown={() => {
             event?.preventDefault();
-            handleClick();
+            handleClick(true);
         }}
-        onMouseOver={() => {if (mouseDown) handleClick()}}
+        onMouseOver={() => {if (mouseDown) handleClick(false)}}
         draggable="false"
         style={{width: (90.0 / gridHeight) + "vh", height: (90.0 / gridHeight) + "vh"}}>
         </div>;

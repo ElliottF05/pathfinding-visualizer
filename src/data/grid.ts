@@ -37,10 +37,11 @@ export interface Cell {
 
 // CONSTANTS & VARIABLES
 
-export let gridWidth: number = 50;
-export let gridHeight: number = 50;
+export let gridWidth: number = 80;
+export let gridHeight: number = 80;
 let status: Status = Status.Idle;
 export let algorithm: Algorithms = Algorithms.Dijkstras;
+export let stepsPerFrame: number = 1;
 let forceUpdateGridFunction: (value: number) => void;
 export const startCellPos: number[] = [-1, -1];
 export const endCellPos: number[] = [-1, -1];
@@ -108,7 +109,7 @@ function clearEndCell() {
 }
 
 function randomizeGrid() {
-    const probability = 0.5 * Math.random();
+    const probability = 0.2 + 0.1 * Math.random();
     for (let i = 0; i < gridHeight; i++) {
         for (let j = 0; j < gridWidth; j++) {
             const currentCell = grid[i][j];
@@ -141,14 +142,14 @@ export function setForceUpdateGridFunction(func: (value: number) => void) {
 
 // HANDLING INPUT
 
-export function handleCellClick(x: number, y: number) {
+export function handleCellClick(x: number, y: number, beginClick: boolean) {
     console.log("click at " + x + " " + y);
     
     if (status == Status.Idle) {
-        if (grid[y][x].type == CellType.Wall) {
-            grid[y][x].type = CellType.Empty;
-        } else if (grid[y][x].type == CellType.Empty) {
+        if (grid[y][x].type == CellType.Empty) {
             grid[y][x].type = CellType.Wall;
+        } else if (beginClick && grid[y][x].type == CellType.Wall) {
+            grid[y][x].type = CellType.Empty;
         }
 
     } else if (status == Status.SelectingStart) {
@@ -214,7 +215,7 @@ export async function handleControlPanelEvents(controlPanelEvent: ControlPanelEv
         
     } else if (controlPanelEvent == ControlPanelEventTypes.randomizeGridClicked) {
         if (status != Status.Running) {
-            resetGrid();
+            resetPathfindingData();
             randomizeGrid();
             forceUpdateGrid();
         }
@@ -271,12 +272,12 @@ function handleWidthChanges(increase: boolean) {
     }
 
     if (increase) {
-        if (gridWidth < 100) {
-            gridWidth++;
+        if (gridWidth < 150) {
+            gridWidth += 5;
         } 
     } else {
-        if (gridWidth > 1) {
-            gridWidth--;
+        if (gridWidth > 5) {
+            gridWidth -= 5;
         }
     }
     resetGrid();
@@ -292,18 +293,26 @@ function handleHeightChanges(increase: boolean) {
     }
 
     if (increase) {
-        if (gridHeight < 100) {
-            gridHeight++;
+        if (gridHeight < 150) {
+            gridHeight += 5;
         } 
     } else {
-        if (gridHeight > 1) {
-            gridHeight--;
+        if (gridHeight > 5) {
+            gridHeight -= 5;
         }
     }
     resetGrid();
     forceUpdateGrid();
 
     status = Status.Idle;
+}
+
+export function handleSpeedSliderChange(event: React.FormEvent<HTMLInputElement>) {
+    if (parseInt(event.currentTarget.value) == 0) {
+        stepsPerFrame = 0;
+    } else {
+        stepsPerFrame = Math.round(Math.pow(1.06411778, parseInt(event.currentTarget.value)));
+    }
 }
 
 export function updateQueued() {
@@ -325,7 +334,7 @@ async function handleSimulation() {
         counter++;
 
         let numberOfSteps: number = 0;
-        while (numberOfSteps < 10) {
+        while (numberOfSteps < stepsPerFrame) {
             numberOfSteps++;
             const stepResult: boolean = step();
             if (stepResult == false) { // pathfinding algorithm reached end

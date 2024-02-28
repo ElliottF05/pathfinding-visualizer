@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { handleControlPanelEvents, Algorithms, gridWidth, gridHeight } from "../../data/grid";
+import { handleControlPanelEvents, Algorithms, gridWidth, gridHeight, stepsPerFrame, handleSpeedSliderChange } from "../../data/grid";
 import "./ControlPanel.css";
 
 export enum ControlPanelEventTypes {
@@ -21,6 +21,7 @@ export enum ControlPanelEventTypes {
 function ControlPanel() {
 
     const [algorithmSelected, setAlgorithmSelected] = useState(Algorithms.Dijkstras);
+    const [update, setUpdate] = useState(0);
 
     return (
         <div id="Control-Panel-Wrapper">
@@ -76,6 +77,19 @@ function ControlPanel() {
             </div>
 
             <button id="Randomize-Grid-Button" onClick={() => handleControlPanelEvents(ControlPanelEventTypes.randomizeGridClicked)}>Randomize Grid</button>
+
+            <div>Steps per frame: {stepsPerFrame}</div>
+            <input
+                id="Speed-Slider"
+                type="range"
+                min={0}
+                max={100}
+                defaultValue={1}
+                onChange={(event) => {
+                    handleSpeedSliderChange(event);
+                    setUpdate(update + 1);
+                }}
+                ></input>
 
         </div>
     );
