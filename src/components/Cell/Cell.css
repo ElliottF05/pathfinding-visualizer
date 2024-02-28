@@ -18,6 +18,11 @@
     background-color: rgb(120, 120, 120);
 }
 
+.current-best-cell {
+    background-color: rgb(100, 150, 100);
+}
+
+
 .shortest-path-cell {
     background-color: lime;
 }

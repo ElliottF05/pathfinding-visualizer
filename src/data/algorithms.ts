@@ -35,6 +35,10 @@ export function clearPriorityQueue() {
     priorityQueue.clear();
 }
 
+export function getTopOfPriorityQueue(): Cell {
+    return priorityQueue.front();
+}
+
 // SLEEP FUNCTION
 export function sleep(delay: number) {
     return new Promise((resolve) => setTimeout(resolve, delay));

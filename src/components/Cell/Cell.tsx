@@ -23,6 +23,7 @@ function Cell({x, y} : {x: number, y: number}) {
         "end-cell": currentCell.type == CellType.End,
         "cell-checked": currentCell.status > 0,
         "shortest-path-cell": currentCell.status == -1,
+        "current-best-cell": currentCell.status == -2,
     });
 
     function handleClick(beginClick: boolean) {

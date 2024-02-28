@@ -1,6 +1,6 @@
 // TYPES, ENUMS, INTERFACES
 
-import { clearPriorityQueue, setupSimulation, step, sleep } from "./algorithms";
+import { clearPriorityQueue, setupSimulation, step, sleep, getTopOfPriorityQueue } from "./algorithms";
 import { ControlPanelEventTypes } from "../components/ControlPanel/ControlPanel";
 
 export enum CellType {
@@ -28,7 +28,7 @@ export interface Cell {
     y: number,
     type: CellType,
     distance: number,
-    status: number // 0 = default, -1 = path of shortest path, positive values = checked recently
+    status: number // 0 = default, -1 = path of shortest path, positive values = checked recently, -2 = current best path
     priority: number;
     previousX: number;
     previousY: number;
@@ -321,6 +321,31 @@ export function updateQueued() {
 
 
 // SIMULATION FUNCTIONS
+
+function clearPreviousBestPath() {
+    for (let i = 0; i < gridHeight; i++) {
+        for (let j = 0; j < gridWidth; j++) {
+            if (grid[i][j].status == -2) {
+                grid[i][j].status = 1;
+            }
+        }
+    }
+}
+
+function traceBestPath() {
+    // first, clear existing best path
+    clearPreviousBestPath();
+
+    let x = getTopOfPriorityQueue().previousX;
+    let y = getTopOfPriorityQueue().previousY;
+    while (x != startCellPos[0] || y != startCellPos[1]) {
+        const currentCell = grid[y][x];
+        currentCell.status = -2;
+        x = currentCell.previousX;
+        y = currentCell.previousY;
+    }
+}
+
 async function handleSimulation() {
 
     if (status == Status.Idle) {
@@ -345,9 +370,12 @@ async function handleSimulation() {
         }
 
         if (status != Status.Running) {
+            clearPreviousBestPath();
             console.log("quitting simulation (no longer running)");
             break;
         }
+
+        traceBestPath();
 
         await sleep(50);
         forceUpdateGrid();
